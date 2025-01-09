@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify
-from nlp import process_user_input
+from flask import Blueprint, request, jsonify
+from app.nlp.processing import process_user_input
 
-app = Flask(__name__)
+bp = Blueprint('api', __name__)
 
-@app.route('/chat', methods=['POST'])
+@bp.route('/chat', methods=['POST'])
 def chat():
     try:
         # Get the user input from the POST request
@@ -17,6 +17,3 @@ def chat():
     except Exception as e:
         # Handle errors and return a helpful response
         return jsonify({"error": str(e)}), 500
-
-if __name__ == "__main__":
-    app.run(debug=True)
