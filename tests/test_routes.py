@@ -9,7 +9,10 @@ class ChatbotRouteTests(unittest.TestCase):
     def test_chat_route_valid_input(self):
         response = self.client.post('/chat', json={"message": "Hello, how are you?"})
         self.assertEqual(response.status_code, 200)
-        self.assertIn("response", response.get_json())
+        json_response = response.get_json()
+        self.assertIn("chatbot_name", json_response)
+        self.assertIn("welcome_message", json_response)
+        self.assertIn("response", json_response)
 
     def test_chat_route_no_input(self):
         response = self.client.post('/chat', json={})
