@@ -4,22 +4,34 @@ from app.nlp.processing import process_user_input
 
 bp = Blueprint('api', __name__)
 
+chat_histories = {}
+
 @bp.route('/chat', methods=['POST'])
 def chat():
     """
     Chatbot route to process user input.
     """
     try:
-        user_input = request.json.get('message', '')
+        data = request.json
+        user_id = data.get("user_id", "0") # get the user_id (default = 0)
+        print("user_id:", user_id)
+
+        user_input = data.get('message', '')
+
         if not user_input:
             return jsonify({"error": "No input provided"}), 400
         
+        # Retrieve or initialize chat history
+        chat_history_ids = chat_histories.get(user_id, None)
+        
         # Fetch admin-configured chatbot details
         chatbot_name = AdminConfig.CHATBOT_NAME
-        welcome_message = AdminConfig.WELCOME_MESSAGE
 
         # Process the user input and get the normalized response
-        response, chat_history_ids = process_user_input(user_input)
+        response, chat_history_ids = process_user_input(user_input, chat_history_ids)
+        
+        # Save chat_history_ids to the memory for a while
+        chat_histories[user_id] = chat_history_ids  # Save updated history
 
         # Formulate the chatbot's full response
         response = {

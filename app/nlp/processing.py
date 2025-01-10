@@ -53,7 +53,7 @@ def generate_response(user_input, chat_history_ids=None):
 
         # Decode the generated response into a plain string
         chat_response = tokenizer.decode(chat_history_ids[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
-        
+
         return chat_response, chat_history_ids
 
     except Exception as e:
