@@ -19,13 +19,12 @@ def chat():
         welcome_message = AdminConfig.WELCOME_MESSAGE
 
         # Process the user input and get the normalized response
-        response_text = process_user_input(user_input)
+        response, chat_history_ids = process_user_input(user_input)
 
         # Formulate the chatbot's full response
         response = {
             "chatbot_name": chatbot_name,
-            "welcome_message": welcome_message,
-            "response": response_text
+            "response": response
         }
         return jsonify(response), 200
     except Exception as e:
